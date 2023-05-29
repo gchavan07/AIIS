@@ -1,0 +1,99 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int main(void)
+{
+int i,j,k,l;
+char a[20],c[20],d[20];
+printf("\n\t\tRAILFENCETECHNIQUE");
+printf("\n\nEnter the input string: ");
+gets(a);
+l=strlen(a);
+/*ciphering*/
+for(i=0,j=0;i<l;i++)
+{
+if(i%2==0)c[j++]=a[i];
+}
+for(i=0;i<l;i++)
+{
+if(i%2==1)c[j++]=a[i];
+}
+c[j]='\0';
+printf("\nCiphertestafterapplyingrailfence: ");
+printf("\n%s",c);
+/*deciphering*/
+if(l%2==0)
+k=l/2;
+else
+k=(l/2)+1;
+for(i=0,j=0;i<k;i++)
+{
+d[j]=c[i];j=j+2;
+}
+for(i=k,j=1;i<l;i++)
+{
+d[j]=c[i];
+j=j+2;
+}
+d[l]='\0';
+printf("\nTextafterdecryption: ");
+printf("%s",d);
+}
+
+
+
+
+
+
+python........
+def encrypt(plaintext, key):
+    ciphertext = ""
+    num_columns = len(key)
+    num_rows = (len(plaintext) + num_columns - 1) // num_columns
+
+    # Pad the plaintext if necessary
+    padded_plaintext = plaintext + " " * (num_rows * num_columns - len(plaintext))
+
+    # Create the transposition matrix
+    matrix = [list(padded_plaintext[i:i+num_columns]) for i in range(0, num_rows*num_columns, num_columns)]
+
+    # Rearrange the matrix columns based on the key
+    rearranged_matrix = [matrix[i][key[j]-1] for i in range(num_rows) for j in range(num_columns)]
+
+    # Convert the rearranged matrix back into a string
+    ciphertext = "".join(rearranged_matrix)
+
+    return ciphertext
+
+
+def decrypt(ciphertext, key):
+    plaintext = ""
+    num_columns = len(key)
+    num_rows = len(ciphertext) // num_columns
+
+    # Create the transposition matrix
+    matrix = [list(ciphertext[i:i+num_columns]) for i in range(0, num_rows*num_columns, num_columns)]
+
+    # Rearrange the matrix columns based on the key
+    rearranged_matrix = [[''] * num_columns for _ in range(num_rows)]
+    for i in range(num_rows):
+        for j in range(num_columns):
+            rearranged_matrix[i][key[j]-1] = matrix[i][j]
+
+    # Convert the rearranged matrix back into a string
+    plaintext = "".join(["".join(row) for row in rearranged_matrix])
+
+    return plaintext
+
+
+# Example usage
+plaintext = "Hello, World!"
+key = [3, 1, 4, 2]  # Example key
+
+# Encryption
+ciphertext = encrypt(plaintext, key)
+print("Ciphertext:", ciphertext)
+
+# Decryption
+decrypted_plaintext = decrypt(ciphertext, key)
+print("Decrypted plaintext:", decrypted_plaintext)

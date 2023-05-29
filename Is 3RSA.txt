@@ -1,0 +1,72 @@
+import math
+p=11
+q=7
+n=p*q
+print ("n =", n)
+phi =(p-1)*(q-1)
+e=2
+while(e<phi):
+    if(math.gcd(e, phi)==1):
+        break
+    else :
+        e += 1
+print("e =", e)
+k=2
+d=((k*phi)+1)/e
+print("d =", d)
+print ("public key: (%d, %d)" % (e,n))
+print ("private key: (%d, %d)" % (d, n))
+msg = 11
+print ("Original message:" , msg)
+
+C=pow(msg, e)
+C=math.fmod(C, n)
+print ("Encrypted message:", C)
+
+M=pow(C, d)
+M=math.fmod(M, n)
+print ("Decrypted message:", M)
+
+
+
+
+chat gpt......
+
+
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
+from cryptography.hazmat.primitives import serialization, hashes
+
+# Generate RSA key pair
+private_key = rsa.generate_private_key(
+    public_exponent=65537,
+    key_size=2048
+)
+public_key = private_key.public_key()
+
+# Example plaintext
+plaintext = b"Hello, World!"
+
+# Encrypting the plaintext using the public key
+ciphertext = public_key.encrypt(
+    plaintext,
+    padding.OAEP(
+        mgf=padding.MGF1(algorithm=hashes.SHA256()),
+        algorithm=hashes.SHA256(),
+        label=None
+    )
+)
+
+# Decrypting the ciphertext using the private key
+decrypted_plaintext = private_key.decrypt(
+    ciphertext,
+    padding.OAEP(
+        mgf=padding.MGF1(algorithm=hashes.SHA256()),
+        algorithm=hashes.SHA256(),
+        label=None
+    )
+)
+
+# Print the results
+print("Plaintext:", plaintext)
+print("Ciphertext:", ciphertext)
+print("Decrypted plaintext:", decrypted_plaintext)
